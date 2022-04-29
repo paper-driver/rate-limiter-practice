@@ -1,0 +1,38 @@
+{
+    "cache": {
+        "size": 50,
+        "ttl": 30
+    },
+    "routes": [
+        {
+            "endpoint":"GET api/pac/get/:id",
+            "burst":10,
+            "sustained":6
+        },
+        {
+            "endpoint":"POST api/pac/update",
+            "burst":5,
+            "sustained":2
+        },
+        {
+            "endpoint":"PUT api/pac/add",
+            "burst":5,
+            "sustained":2
+        },
+        {
+            "endpoint":"DELETE api/pac/delete",
+            "burst":5,
+            "sustained":2
+        },
+        {
+            "endpoint":"GET api/beneficiary/get/:id",
+            "burst":10,
+            "sustained":6
+        },
+        {
+            "endpoint":"GET api/funds/get/:id",
+            "burst":10,
+            "sustained":6
+        }
+    ]
+}
