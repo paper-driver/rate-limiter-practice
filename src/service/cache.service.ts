@@ -1,8 +1,8 @@
 import { Injectable, Inject, CACHE_MANAGER, BadRequestException } from "@nestjs/common";
 import { Cache } from "cache-manager";
-import { CONFIG } from "src/config/config.module";
-import { RouteConfig, Config } from "src/config/config";
-import { Bucket, CachedBuckets } from "src/model/app.model";
+import { CONFIG } from "../config/config.module";
+import { RouteConfig, Config } from "../config/config";
+import { Bucket, CachedBuckets } from "../model/app.model";
 
 @Injectable()
 export class CacheService {
@@ -21,7 +21,7 @@ export class CacheService {
     }
 
     async setClient(ip: string): Promise<CachedBuckets>{
-        const client = await this.cacheManager.set(ip, {}, this.ttl);
+        await this.cacheManager.set(ip, {}, this.ttl);
         return await this.cacheManager.get(ip);
     }
 

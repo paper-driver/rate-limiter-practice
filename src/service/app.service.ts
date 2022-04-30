@@ -1,8 +1,8 @@
 import { Injectable, Inject, BadRequestException, CACHE_MANAGER } from '@nestjs/common';
-import { AccessDto, RouteStatus } from 'src/model/app.model';
-import { CONFIG } from 'src/config/config.module';
-import { Config, RouteConfig } from 'src/config/config';
+import { AccessDto, RouteStatus } from '../model/app.model';
+import { Config, RouteConfig } from '../config/config';
 import { CacheService } from './cache.service';
+import { CONFIG } from '../config/config.module';
 
 @Injectable()
 export class AppService {
@@ -11,11 +11,6 @@ export class AppService {
   constructor(@Inject(CONFIG) config: Config, private cacheService: CacheService){
     this.routes = config.routes;
   }
-
-  getHello(): string {
-    return 'Hello World!';
-  }
-
 
   async getPermission(ip: string, route: string): Promise<AccessDto> {
     let client = await this.cacheService.getClient(ip);
