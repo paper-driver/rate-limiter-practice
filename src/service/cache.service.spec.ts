@@ -1,6 +1,6 @@
 import { CacheService } from "./cache.service";
 import { Test } from "@nestjs/testing";
-import { CacheModule, CACHE_MANAGER } from "@nestjs/common";
+import { CacheModule, CACHE_MANAGER, BadRequestException } from "@nestjs/common";
 import { CONFIG } from "../config/config.module";
 import { Cache } from "cache-manager";
 import { Bucket } from "../model/app.model";
@@ -69,5 +69,14 @@ describe('CacheService', () => {
             availableTokens: 3,
             sustainRate: 1000
         });
+    })
+
+    it('should throw a exception if there is no such route', async () => {
+        try {
+            await cacheService.addBucket('1', 'GET invalid/api');
+        } catch (err) {
+            expect(err).toBeInstanceOf(BadRequestException);
+            expect(err.message).toEqual('no such route');
+        }
     })
 })
