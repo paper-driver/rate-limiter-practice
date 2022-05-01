@@ -9,6 +9,10 @@ describe('CacheService', () => {
     let cacheService: CacheService;
     let cacheManager: Cache;
 
+    const sleep = (time) => {
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+
     beforeEach(async () => {
         const module = await Test.createTestingModule({
             imports: [CacheModule.register({ max: 3})],
@@ -25,7 +29,7 @@ describe('CacheService', () => {
                         },
                         cache: {
                             size: 3,
-                            ttl: 5
+                            ttl: 0.5
                         }
                     }
                 }
@@ -34,6 +38,10 @@ describe('CacheService', () => {
 
         cacheService = module.get<CacheService>(CacheService);
         cacheManager = module.get<Cache>(CACHE_MANAGER);
+    })
+
+    afterEach(() => {
+        jest.useRealTimers();
     })
 
     it.each<any>([
@@ -78,5 +86,18 @@ describe('CacheService', () => {
             expect(err).toBeInstanceOf(BadRequestException);
             expect(err.message).toEqual('no such route');
         }
+    })
+
+    it('should delete cache if it is expired and provide a new cache', async () => {
+        jest.useFakeTimers();
+        await cacheService.addBucket('1', 'GET mock/api');
+
+        let client = await cacheService.getClient('1');
+        expect(client['GET mock/api']).toBeDefined();
+
+        jest.advanceTimersByTime(501)
+
+        client = await cacheService.getClient('1');
+        expect(client['GET mock/api']).toBeUndefined();
     })
 })

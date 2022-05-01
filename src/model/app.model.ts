@@ -74,7 +74,9 @@ export class Bucket {
             const proposed = Math.floor((curTime - this.lastUpdate)/this.sustainRate);
             const actual = this.burst - this.availableTokens;
             this.availableTokens += proposed > actual ? actual : proposed;
-            this.lastUpdate = curTime;
+            if(actual != 0 && proposed != 0){
+                this.lastUpdate = curTime;
+            }
         }
         return this.availableTokens;
     }

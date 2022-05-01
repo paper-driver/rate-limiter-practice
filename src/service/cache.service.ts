@@ -21,7 +21,7 @@ export class CacheService {
     }
 
     async setClient(ip: string): Promise<CachedBuckets>{
-        await this.cacheManager.set(ip, {}, this.ttl);
+        await this.cacheManager.set(ip, {}, {ttl: this.ttl});
         return await this.cacheManager.get(ip);
     }
 
@@ -36,7 +36,7 @@ export class CacheService {
         }else{
             const bucket = new Bucket(endpoint, routeInfo.burst, routeInfo.sustained);
             client[endpoint] = bucket;
-            await this.cacheManager.set(ip, client, this.ttl);
+            await this.cacheManager.set(ip, client, {ttl: this.ttl});
             return bucket;
         }
             
